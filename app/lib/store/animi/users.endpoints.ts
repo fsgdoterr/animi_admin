@@ -35,7 +35,7 @@ function getTotalCountFromHeaders(meta: unknown) {
     return Number.isFinite(totalCount) ? totalCount : 0;
 }
 
-const animiAuthEndpoints = animiApi.injectEndpoints({
+const animiUsersEndpoints = animiApi.injectEndpoints({
     endpoints: (builder) => ({
         getAllUsers: builder.query<GetAllUsersResponse, GetAllUsersRequest>({
             query: ({ page, limit, search }) => ({
@@ -102,4 +102,4 @@ export const {
     useGetOneUserQuery,
     useUpdateUserMutation,
     useDeleteUserMutation,
-} = animiAuthEndpoints;
+} = animiUsersEndpoints;

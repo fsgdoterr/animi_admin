@@ -1,4 +1,4 @@
-import UsersTable from "~/components/pages/users/users-table";
+import ReleaseteamsTable from "~/components/pages/releaseteams/releaseteams-table";
 import ListSearch from "~/components/ui/list-search";
 import PageCard from "~/components/ui/page-card";
 import PageHeader from "~/components/ui/page-header";
@@ -7,12 +7,12 @@ import { useDeleteEntity } from "~/lib/hooks/use-delete-entity";
 import { useListSearchParams } from "~/lib/hooks/use-list-search-params";
 import { useSyncPaginationBounds } from "~/lib/hooks/use-sync-pagination-bounds";
 import {
-    useDeleteUserMutation,
-    useGetAllUsersQuery,
-} from "~/lib/store/animi/users.endpoints";
-import type { User } from "~/lib/types/entities/user-type";
+    useDeleteReleaseTeamMutation,
+    useGetAllReleaseTeamsQuery,
+} from "~/lib/store/animi/releaseteams.endpoints";
+import type { ReleaseTeam } from "~/lib/types/entities/release-team-type";
 
-export default function UsersPage() {
+export default function ReleaseteamsPage() {
     const {
         page,
         limit,
@@ -25,14 +25,15 @@ export default function UsersPage() {
         onLimitChange,
     } = useListSearchParams();
 
-    const { data, isLoading, isFetching } = useGetAllUsersQuery({
+    const { data, isLoading, isFetching } = useGetAllReleaseTeamsQuery({
         page,
         limit,
         search: search || undefined,
     });
-    const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation();
+    const [deleteReleaseTeam, { isLoading: isDeleting }] =
+        useDeleteReleaseTeamMutation();
 
-    const users = data?.items ?? [];
+    const releaseTeams = data?.items ?? [];
     const totalCount = data?.totalCount ?? 0;
 
     useSyncPaginationBounds({
@@ -43,32 +44,35 @@ export default function UsersPage() {
         setPagination,
     });
 
-    const handleDelete = useDeleteEntity<User, number>({
-        deleteMutation: deleteUser,
-        getId: (user) => user.id,
-        getConfirmMessage: (user) =>
-            `Ви впевнені що хочете видалити користувача - ${user.username}`,
-        successMessage: "Користувача видалено.",
-        errorMessage: "Не вдалося видалити користувача.",
-        itemsOnPage: users.length,
+    const handleDelete = useDeleteEntity<ReleaseTeam, number>({
+        deleteMutation: deleteReleaseTeam,
+        getId: (releaseTeam) => releaseTeam.id,
+        getConfirmMessage: (releaseTeam) =>
+            `Ви впевнені що хочете видалити команду озвучення - ${releaseTeam.title}`,
+        successMessage: "Команду озвучення видалено.",
+        errorMessage: "Не вдалося видалити команду озвучення.",
+        itemsOnPage: releaseTeams.length,
         page,
         onLastPageItemDeleted: () => setPagination(page - 1),
     });
 
     return (
         <div className="flex flex-col gap-5">
-            <PageHeader title="Користувачі" createCllbck="/users/create" />
+            <PageHeader
+                title="Команди озвучення"
+                createCllbck="/releaseteams/create"
+            />
 
             <ListSearch
                 value={searchValue}
-                placeholder="Пошук користувача"
+                placeholder="Пошук команди"
                 onChange={setSearchValue}
                 onClear={clearSearch}
             />
 
             <PageCard className="flex flex-col gap-4">
-                <UsersTable
-                    users={users}
+                <ReleaseteamsTable
+                    releaseTeams={releaseTeams}
                     isLoading={isLoading || isFetching || isDeleting}
                     onDelete={handleDelete}
                 />

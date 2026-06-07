@@ -6,7 +6,7 @@ import UserForm from "~/components/pages/users/user-form";
 import Button from "~/components/ui/buttons/button";
 import PageCard from "~/components/ui/page-card";
 import PageHeader from "~/components/ui/page-header";
-import { useUpdateUserMutation } from "~/lib/store/animi/users.endpoint";
+import { useUpdateUserMutation } from "~/lib/store/animi/users.endpoints";
 import type { User } from "~/lib/types/entities/user-type";
 import type { UserFormType } from "~/lib/types/forms/user.form-type";
 import { getApiErrorMessage } from "~/lib/utils/get-api-error-message";

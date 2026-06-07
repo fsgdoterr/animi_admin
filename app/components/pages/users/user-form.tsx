@@ -1,17 +1,15 @@
-import { RotateCcw } from "lucide-react";
 import {
     Controller,
     useForm,
-    type FieldErrors,
     type SubmitErrorHandler,
     type SubmitHandler,
 } from "react-hook-form";
-import toast from "react-hot-toast";
-import Button from "~/components/ui/buttons/button";
 import Input from "~/components/ui/inputs/input";
 import Select from "~/components/ui/select";
 import { Permissions } from "~/lib/constants/permissions";
+import { useResetFieldButton } from "~/lib/hooks/use-reset-field-button";
 import type { UserFormType } from "~/lib/types/forms/user.form-type";
+import { showFormErrorsToast } from "~/lib/utils/form-errors";
 
 interface Props {
     submit: SubmitHandler<UserFormType>;
@@ -33,35 +31,6 @@ const permissionValues = [
         value: Permissions.SUPER_ADMIN,
     },
 ];
-
-function collectFormErrorMessages(errors: FieldErrors<UserFormType>) {
-    const messages: string[] = [];
-
-    const collect = (value: unknown) => {
-        if (!value || typeof value !== "object") {
-            return;
-        }
-
-        const error = value as Record<string, unknown>;
-
-        if (typeof error.message === "string") {
-            messages.push(error.message);
-            return;
-        }
-
-        Object.entries(error).forEach(([key, nestedValue]) => {
-            if (["message", "ref", "type", "types"].includes(key)) {
-                return;
-            }
-
-            collect(nestedValue);
-        });
-    };
-
-    collect(errors);
-
-    return messages;
-}
 
 export default function UserForm({
     submit,
@@ -89,41 +58,13 @@ export default function UserForm({
 
     const invalidSubmitHandler: SubmitErrorHandler<UserFormType> = (
         formErrors,
-    ) => {
-        const messages = collectFormErrorMessages(formErrors);
+    ) => showFormErrorsToast(formErrors);
 
-        toast.error(
-            <div className="flex flex-col gap-1">
-                <span>Перевірте поля форми:</span>
-                {messages.map((message) => (
-                    <span key={message}>• {message}</span>
-                ))}
-            </div>,
-        );
-    };
-
-    const renderResetButton = (fieldName: keyof UserFormType) => {
-        if (!showResetButtons) {
-            return null;
-        }
-
-        const isDirty = Boolean(dirtyFields[fieldName]);
-
-        return (
-            <Button
-                type="button"
-                color="BLUE"
-                transparent
-                isQuad
-                disabled={!isDirty}
-                tooltipText="Скинути поле"
-                onClick={() => resetField(fieldName)}
-                className="shrink-0 self-stretch"
-            >
-                <RotateCcw size={16} />
-            </Button>
-        );
-    };
+    const renderResetButton = useResetFieldButton<UserFormType>({
+        dirtyFields,
+        resetField,
+        showResetButtons,
+    });
 
     return (
         <form

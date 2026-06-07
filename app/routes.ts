@@ -15,7 +15,11 @@ export default [
             route("/genres", "routes/genres/genres.tsx"),
             route("/codes", "routes/codes/codes.tsx"),
             route("/players", "routes/players/players.tsx"),
-            route("/releaseteams", "routes/releaseteams/releaseteams.tsx"),
+            ...prefix('releaseteams', [
+                index("routes/releaseteams/releaseteams.tsx"),
+                route("create", "routes/releaseteams/create-releaseteams.tsx"),
+                route(":id", "routes/releaseteams/edit-releaseteams.tsx"),
+            ]),
         ])
     ]),
 ] satisfies RouteConfig;

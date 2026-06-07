@@ -1,8 +1,5 @@
-export default function Releaseteams() {
+import ReleaseteamsPage from "~/components/pages/releaseteams/releaseteams-page";
 
-    return(
-        <div>
-            Animes
-        </div>
-    )
+export default function Releaseteams() {
+    return <ReleaseteamsPage />
 }

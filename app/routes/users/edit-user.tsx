@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import EditUserPage from "~/components/pages/users/edit-user-page";
 import Loader from "~/components/ui/loader";
 import PageCard from "~/components/ui/page-card";
-import { useGetOneUserQuery } from "~/lib/store/animi/users.endpoint";
+import { useGetOneUserQuery } from "~/lib/store/animi/users.endpoints";
 
 export default function EditUser() {
     const { id } = useParams();
