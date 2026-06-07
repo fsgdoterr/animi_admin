@@ -56,7 +56,7 @@ export default function Table<T>({
                         {columns.map((column, index) => (
                             <th
                                 key={column.id}
-                                style={{ width: column.width }}
+                                style={{ minWidth: column.width, maxWidth: column.width }}
                                 className={cn(
                                     "px-3 py-2 font-normal first:rounded-l last:rounded-r",
                                     alignClass(column.align),

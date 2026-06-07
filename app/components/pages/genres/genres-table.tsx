@@ -5,6 +5,7 @@ import {
     createCreatedAtColumn,
     createIdColumn,
     createTextColumn,
+    createTitleWithPosterColumn,
 } from "~/lib/utils/table-columns";
 
 interface Props {
@@ -20,12 +21,7 @@ export default function GenresTable({
 }: Props) {
     const columns: TableColumn<Genre>[] = [
         createIdColumn<Genre>(),
-        createTextColumn<Genre>({
-            id: "title",
-            header: "Назва",
-            width: "25%",
-            getValue: (genre) => genre.title,
-        }),
+        createTitleWithPosterColumn<Genre>(),
         createCreatedAtColumn<Genre>(),
         createActionsColumn<Genre>({
             editUrl: (genre) => `/genres/${genre.id}`,
