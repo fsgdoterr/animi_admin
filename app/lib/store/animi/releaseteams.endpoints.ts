@@ -1,5 +1,6 @@
 import { animiApi } from "~/lib/store/api/animi.api";
 import type { ReleaseTeam } from "~/lib/types/entities/release-team-type";
+import { getTotalCountFromHeaders } from "~/lib/utils/get-total-count-from-headers";
 
 export interface GetAllReleaseTeamsRequest {
     page: number;
@@ -19,14 +20,6 @@ interface CreateReleaseTeamRequest {
 interface UpdateReleaseTeamRequest {
     id: number;
     body: Partial<CreateReleaseTeamRequest>;
-}
-
-function getTotalCountFromHeaders(meta: unknown) {
-    const response = (meta as { response?: Response } | undefined)?.response;
-    const totalCountHeader = response?.headers.get("X-Total-Count");
-    const totalCount = Number(totalCountHeader ?? 0);
-
-    return Number.isFinite(totalCount) ? totalCount : 0;
 }
 
 const animiReleaseteamsEndpoints = animiApi.injectEndpoints({

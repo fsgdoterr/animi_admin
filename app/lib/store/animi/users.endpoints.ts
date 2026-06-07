@@ -1,6 +1,7 @@
 import { animiApi } from "~/lib/store/api/animi.api";
 import type { Permissions } from "~/lib/constants/permissions";
 import type { User } from "~/lib/types/entities/user-type";
+import { getTotalCountFromHeaders } from "~/lib/utils/get-total-count-from-headers";
 
 export interface GetAllUsersRequest {
     page: number;
@@ -25,14 +26,6 @@ interface CreateUserRequest {
 interface UpdateUserRequest {
     id: number;
     body: Partial<CreateUserRequest>;
-}
-
-function getTotalCountFromHeaders(meta: unknown) {
-    const response = (meta as { response?: Response } | undefined)?.response;
-    const totalCountHeader = response?.headers.get("X-Total-Count");
-    const totalCount = Number(totalCountHeader ?? 0);
-
-    return Number.isFinite(totalCount) ? totalCount : 0;
 }
 
 const animiUsersEndpoints = animiApi.injectEndpoints({

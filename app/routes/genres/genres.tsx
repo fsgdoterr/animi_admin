@@ -1,8 +1,5 @@
-export default function Genres() {
+import GenresPage from "~/components/pages/genres/genres-page";
 
-    return(
-        <div>
-            Animes
-        </div>
-    )
+export default function Genres() {
+    return <GenresPage />;
 }

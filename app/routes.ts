@@ -12,9 +12,17 @@ export default [
                 route(":id", "routes/users/edit-user.tsx"),
             ]),
             route("/images", "routes/images/images.tsx"),
-            route("/genres", "routes/genres/genres.tsx"),
             route("/codes", "routes/codes/codes.tsx"),
-            route("/players", "routes/players/players.tsx"),
+            ...prefix("genres", [
+                index("routes/genres/genres.tsx"),
+                route("create", "routes/genres/create-genre.tsx"),
+                route(":id", "routes/genres/edit-genre.tsx"),
+            ]),
+            ...prefix('players', [
+                index("routes/players/players.tsx"),
+                route("create", "routes/players/create-player.tsx"),
+                route(":id", "routes/players/edit-player.tsx"),
+            ]),
             ...prefix('releaseteams', [
                 index("routes/releaseteams/releaseteams.tsx"),
                 route("create", "routes/releaseteams/create-releaseteams.tsx"),

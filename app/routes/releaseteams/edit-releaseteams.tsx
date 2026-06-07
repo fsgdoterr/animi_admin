@@ -7,11 +7,11 @@ import { useGetOneReleaseTeamQuery } from "~/lib/store/animi/releaseteams.endpoi
 
 export default function EditReleaseTeams() {
     const { id } = useParams();
-    const userId = id ? Number(id) : Number.NaN;
-    const isValidReleaseTeamId = Number.isFinite(userId);
+    const playerId = id ? Number(id) : Number.NaN;
+    const isValidReleaseTeamId = Number.isFinite(playerId);
 
     const { data, isLoading, isFetching, isError } = useGetOneReleaseTeamQuery(
-        isValidReleaseTeamId ? userId : skipToken,
+        isValidReleaseTeamId ? playerId : skipToken,
     );
 
     if (!isValidReleaseTeamId) {

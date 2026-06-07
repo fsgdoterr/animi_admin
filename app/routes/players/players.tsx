@@ -1,8 +1,5 @@
-export default function Players() {
+import PlayersPage from "~/components/pages/players/players-page";
 
-    return(
-        <div>
-            Animes
-        </div>
-    )
+export default function Players() {
+    return <PlayersPage />
 }
