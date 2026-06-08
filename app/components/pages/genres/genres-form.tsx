@@ -80,6 +80,7 @@ export default function GenresForm({
                             <SelectImage 
                                 value={field.value}
                                 onChange={field.onChange}
+                                className="w-32 h-32"
                             />
                         }
                     />

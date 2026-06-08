@@ -23,7 +23,7 @@ export default function SelectImage({
 }: Props) {
     const [showModal, setShowModal] = useState<boolean>(false);
     const classes = clsx(
-        "w-32 h-32 rounded-xl bg-(--grey-2) relative",
+        "rounded-xl bg-(--grey-2) relative",
         error && "ring-1 ring-(--red)/65",
         className,
     );

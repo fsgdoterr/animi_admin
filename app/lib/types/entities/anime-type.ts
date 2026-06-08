@@ -15,13 +15,15 @@ export interface AnimeBase {
     episodesTotal: number | null;
     seasonNumber: number | null;
     partNumber: number | null;
-    releaseDate: Date | null;
-    endDate: Date | null;
+    releaseDate: string | null;
+    endDate: string | null;
     country: string | null;
     duration: number | null;
     studio: string | null;
     poster: Image | null;
     genres: Genre[];
+    mal: string;
+    al: string;
     createdAt: string;
     updatedAt: string;
 }

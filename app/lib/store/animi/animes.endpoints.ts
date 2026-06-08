@@ -1,3 +1,5 @@
+import type { AnimeStatus } from "~/lib/constants/anime-status";
+import type { AnimeType } from "~/lib/constants/anime-type";
 import { animiApi } from "~/lib/store/api/animi.api";
 import type { AnimeBase, AnimeFull } from "~/lib/types/entities/anime-type";
 import { getTotalCountFromHeaders } from "~/lib/utils/get-total-count-from-headers";
@@ -13,11 +15,33 @@ export interface GetAllAnimesResponse {
     totalCount: number;
 }
 
-interface CreateAnimeRequest {
+export interface CreateAnimeRequest {
     title: string;
+    originalTitle?: string;
+    engTitle?: string;
+    description?: string;
+    type?: AnimeType;
+    status?: AnimeStatus;
+    episodesTotal?: number;
+    seasonNumber?: number;
+    partNumber?: number;
+    releaseDate?: string;
+    endDate?: string;
+    country?: string;
+    duration?: number;
+    studio?: string;
+    mal?: string
+    al?: string;
+    poster?: number | string;
+    screenshots?: (number | string)[];
+    genres?: string[];
+    relation?: {
+        type: "ANIME" | "RELATION";
+        id: number;
+    };
 }
 
-interface UpdateAnimeRequest {
+export interface UpdateAnimeRequest {
     id: number;
     body: Partial<CreateAnimeRequest>;
 }

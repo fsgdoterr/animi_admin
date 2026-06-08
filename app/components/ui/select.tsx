@@ -212,7 +212,7 @@ export default function Select<T>({
 
             {isOpen && (
                 <div
-                    className="absolute z-20 left-0 top-full w-full bg-(--bg-3) rounded-xl mt-1 flex flex-col gap-1 items-start max-h-40 overflow-y-auto no-scrollbar py-2 px-2 shadow-lg"
+                    className="absolute z-20 left-0 top-full w-full bg-(--bg-3) rounded-xl mt-1 flex flex-col gap-1 items-start max-h-43 overflow-y-auto no-scrollbar py-2 px-2 shadow-lg"
                     role="listbox"
                 >
                     {values.map((vl, index) => {
