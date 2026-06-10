@@ -1,6 +1,7 @@
 import type { DateRangeValue } from "~/components/ui/date-picker";
 import type { AnimeStatus } from "~/lib/constants/anime-status";
 import type { AnimeType } from "~/lib/constants/anime-type";
+import type { AnimeBase } from "~/lib/types/entities/anime-type";
 import type { Image } from "~/lib/types/entities/image-type";
 
 export type ScreenshotType = Image | {id: string; img: string};
@@ -37,5 +38,6 @@ export interface AnimeFormType {
     relation?: {
         type: "ANIME" | "RELATION";
         id: number;
+        items: AnimeBase[];
     }
 }

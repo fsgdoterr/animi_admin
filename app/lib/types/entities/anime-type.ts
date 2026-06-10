@@ -30,10 +30,10 @@ export interface AnimeBase {
 
 export interface Relation {
     id: number;
-    items: AnimeBase;
+    items: AnimeBase[];
 }
 
 export interface AnimeFull extends AnimeBase {
     screenshots: Image[];
-    relations: Relation;
+    relation: Relation | null;
 }

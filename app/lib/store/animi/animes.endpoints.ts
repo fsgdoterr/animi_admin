@@ -2,17 +2,17 @@ import type { AnimeStatus } from "~/lib/constants/anime-status";
 import type { AnimeType } from "~/lib/constants/anime-type";
 import { animiApi } from "~/lib/store/api/animi.api";
 import type { AnimeBase, AnimeFull } from "~/lib/types/entities/anime-type";
+import type {
+    CursorPaginationRequest,
+    PagePaginationRequest,
+} from "~/lib/types/pagination";
+import { getNextCursorFromHeaders } from "~/lib/utils/get-next-cursor-from-headers";
 import { getTotalCountFromHeaders } from "~/lib/utils/get-total-count-from-headers";
-
-export interface GetAllAnimesRequest {
-    page: number;
-    limit: number;
-    search?: string;
-}
 
 export interface GetAllAnimesResponse {
     items: AnimeBase[];
     totalCount: number;
+    nextCursor?: number;
 }
 
 export interface CreateAnimeRequest {
@@ -30,7 +30,7 @@ export interface CreateAnimeRequest {
     country?: string;
     duration?: number;
     studio?: string;
-    mal?: string
+    mal?: string;
     al?: string;
     poster?: number | string;
     screenshots?: (number | string)[];
@@ -38,7 +38,7 @@ export interface CreateAnimeRequest {
     relation?: {
         type: "ANIME" | "RELATION";
         id: number;
-    };
+    } | null;
 }
 
 export interface UpdateAnimeRequest {
@@ -48,8 +48,65 @@ export interface UpdateAnimeRequest {
 
 const animiAnimesEndpoints = animiApi.injectEndpoints({
     endpoints: (builder) => ({
-        getAllAnimes: builder.query<GetAllAnimesResponse, GetAllAnimesRequest>({
-            query: ({ page, limit, search }) => ({
+        getAllAnimeCursor: builder.query<
+            GetAllAnimesResponse,
+            CursorPaginationRequest
+        >({
+            query: ({ search, limit, cursor }) => ({
+                url: "/anime",
+                params: {
+                    cursor,
+                    limit,
+                    ...(search ? { search } : {}),
+                },
+            }),
+            transformResponse: (response: AnimeBase[], meta) => ({
+                items: Array.isArray(response) ? response : [],
+                totalCount: getTotalCountFromHeaders(meta),
+                nextCursor: getNextCursorFromHeaders(meta),
+            }),
+            serializeQueryArgs: ({ endpointName, queryArgs }) => {
+                return `${endpointName}-${queryArgs.search ?? ""}-${queryArgs.limit}`;
+            },
+            merge: (currentCache, newCache, { arg }) => {
+                currentCache.totalCount = newCache.totalCount;
+                currentCache.nextCursor = newCache.nextCursor;
+
+                if (arg.cursor == null) {
+                    currentCache.items = newCache.items;
+                    return;
+                }
+
+                const existingIds = new Set(
+                    currentCache.items.map((anime) => anime.id),
+                );
+
+                for (const anime of newCache.items) {
+                    if (!existingIds.has(anime.id)) {
+                        currentCache.items.push(anime);
+                    }
+                }
+            },
+            forceRefetch({ currentArg, previousArg }) {
+                return (
+                    currentArg?.cursor !== previousArg?.cursor ||
+                    currentArg?.search !== previousArg?.search ||
+                    currentArg?.limit !== previousArg?.limit
+                );
+            },
+            providesTags: (result) => [
+                { type: "Anime", id: "LIST" },
+                ...(result?.items.map((anime) => ({
+                    type: "Anime" as const,
+                    id: anime.id,
+                })) ?? []),
+            ],
+        }),
+        getAllAnimes: builder.query<
+            GetAllAnimesResponse,
+            PagePaginationRequest
+        >({
+            query: ({ search, limit, page }) => ({
                 url: "/anime",
                 params: {
                     page,
@@ -108,9 +165,11 @@ const animiAnimesEndpoints = animiApi.injectEndpoints({
 });
 
 export const {
+    useGetAllAnimeCursorQuery,
     useGetAllAnimesQuery,
     useCreateAnimeMutation,
     useGetOneAnimeQuery,
+    useLazyGetOneAnimeQuery,
     useUpdateAnimeMutation,
     useDeleteAnimeMutation,
 } = animiAnimesEndpoints;

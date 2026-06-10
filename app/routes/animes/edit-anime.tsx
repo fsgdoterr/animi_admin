@@ -15,6 +15,9 @@ export default function EditAnime() {
 
     const { data, isLoading, isFetching, isError } = useGetOneAnimeQuery(
         isValidAnimeId ? animeId : skipToken,
+        {
+            refetchOnMountOrArgChange: true,
+        },
     );
 
     const dispatch = useAppDispatch();

@@ -5,7 +5,6 @@ import { useNavigate } from "react-router";
 import AnimeForm from "~/components/pages/animes/anime-form/anime-form";
 import Button from "~/components/ui/buttons/button";
 import TabButton from "~/components/ui/buttons/tab-button";
-import PageCard from "~/components/ui/page-card";
 import PageHeader from "~/components/ui/page-header";
 import {
     useUpdateAnimeMutation,
@@ -43,10 +42,13 @@ export default function EditAnimePage({ anime }: { anime: AnimeFull }) {
             status: anime.status || undefined,
             poster: anime.poster || undefined,
             screenshots: anime.screenshots,
-            // relation?: {
-            //     type: "ANIME" | "RELATION";
-            //     id: number;
-            // }
+            relation: anime.relation
+                ? {
+                      type: "RELATION",
+                      id: anime.relation.id,
+                      items: anime.relation.items,
+                  }
+                : undefined,
         }),
         [anime],
     );
@@ -78,8 +80,17 @@ export default function EditAnimePage({ anime }: { anime: AnimeFull }) {
                 screenshots: data.screenshots?.map((scr) =>
                     "img" in scr ? scr.img : scr.id,
                 ),
+                relation: data.relation
+                    ? data.relation.id >= 0
+                        ? {
+                              type: data.relation.type,
+                              id: data.relation.id,
+                          }
+                        : null
+                    : undefined,
                 // relation
             } satisfies Partial<CreateAnimeRequest>;
+
             await updateAnime({
                 id: anime.id,
                 body: obj,

@@ -34,7 +34,7 @@ export default function SelectImage({
 
     const unselect = () => {
         onChange?.("");
-    }
+    };
 
     return (
         <div className={classes}>
@@ -79,10 +79,15 @@ export default function SelectImage({
                     </>
                 ) : (
                     <>
-                    <span className="text-sm">Обрано з галереї</span>
-                    <Button onClick={unselect} transparent isQuad color="RED">
-                        Переобрати
-                    </Button>
+                        <span className="text-sm">Обрано з галереї</span>
+                        <Button
+                            onClick={unselect}
+                            transparent
+                            isQuad
+                            color="RED"
+                        >
+                            Переобрати
+                        </Button>
                     </>
                 )}
             </div>
